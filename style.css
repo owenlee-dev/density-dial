@@ -30,10 +30,11 @@ body{
 .plot-chord{
     border-radius:200px;
     position:absolute;
+    /* circle radius is 200px because 3.99* 50px (50px=1m) */
     width:400px;
     height:400px;
-    transform: translateY(30%);
-    left:15%;
+    transform: translateY(10%);
+    left:40%;
     position: absolute;
     background-color: transparent;
     border:5px solid orange;
@@ -58,6 +59,8 @@ margin-top:50%;
 margin-right:15%;
 }
 .grid-item{
+    margin:0;
+    padding:0;
     border:2px solid black;
     z-index:3;
     width:1vw;

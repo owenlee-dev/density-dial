@@ -1,102 +1,122 @@
-body{
-    background-color: #98B6B1;
-    overflow:hidden;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    height:100vh;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
-}
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
 
-.grid-frame{
-    width:40em;
-    height:40em;
-    position:relative;
-    display:flex;
+body {
+  background-color: #98b6b1;
+  display: flex;
+  flex-direction: column;
+  padding: 3em;
+  gap: 5em;
+  overflow-x: hidden;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Itim', cursive;
 
 }
-
-.grid-container{
-    height:max-content;
-    width:max-content;
-    display:grid;
-    margin-left:-55%;
-    margin-top:-55%;
-    column-gap:5em;
-    row-gap:5em;
-    grid-template-rows:1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-}
-.plot-chord{
-    border-radius:200px;
-    position:absolute;
-    /* circle radius is 200px because 3.99* 50px (50px=1m) */
-    width:400px;
-    height:400px;
-    transform: translateY(10%);
-    left:40%;
-    position: absolute;
-    background-color: transparent;
-    border:5px solid orange;
-    overflow:hidden;
-}
-.radius {
-  position:absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  width:200px;
-  height:2px;
-  background-color: darkcyan;
-}
-.radius-txt{
-position:absolute;
-right:0;
-top:0;
-bottom:0;
-margin-top:50%;
-margin-right:15%;
-}
-.grid-item{
-    margin:0;
-    padding:0;
-    border:2px solid black;
-    z-index:3;
-    width:1vw;
-    height:1vw;
-    border-radius:50px;
-    background-color:seagreen;
-}
-.shovel{
-    z-index:2;
-    justify-self: center;
-    margin-left:19em;
-    margin-bottom:3%;
-    align-self: center;
-    width:1.5vw;
-    height:0.9vw;
-    border-radius:50px;
-    background-color:lightblue;
-}
-
-.slider-container{
-    position:absolute;
-    display:flex;
-    flex-direction: column;
-    width:auto;
-    height:auto;
-    gap:2em;
-    border:2px solid coral;
-    background-color: bisque;
-    left:0;
-    top:0;
-    padding:2.5em;
-    margin-left:5%;
-    margin-top:5%;
+.dd-title {
+  text-align: center;
+  font-size: 3vw;
+  padding:0px 5px;
+  font-family: 'Carter One', cursive;
+  border:2px solid black;
+  box-shadow:10px 10px 20px black;
+  @media only screen and (max-width: 600px) {
+    font-size: 6vw;
   }
-input[type="range"]{
-  width: 100%;
+}
+
+.slider-header {
+  border-top:2px solid black;
+  border-bottom:2px solid black; 
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+.step-container{
+  padding:2em;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.step-slider {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(270deg);
+  width:30%;
+  height:20%;
+}
+.data-value {
+  font-weight: bold;
+  font-size: 3vw;
+  padding:0em 1em;
+  @media only screen and (max-width: 600px) {
+    font-size: 6vw;
+  }
+}
+.data-out{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grid-frame {
+  position: relative;
+  display: flex;
+}
+
+.grid-container {
+  position: absolute;
+  transform: translateX(5%);
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.plot-chord {
+  outline: 4px solid orange;
+  border-radius: 200px;
+  /* circle radius is 100px because 3.99* 25px (50px=1m) */
+  width: 200px;
+  height: 200px;
+  transform: translateY(10%);
+  left: 40%;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.grid-item {
+  padding: 0;
+  margin: 0;
+  border: 2px solid black;
+  z-index: 3;
+  width: 7px;
+  height: 7px;
+  border-radius: 50px;
+  background-color: seagreen;
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  gap: 2em;
+  border: 2px solid coral;
+  background-color: bisque;
+  padding: 2em;
+  /* margin: 2em; */
+  @media only screen and (max-width: 600px) {
+    padding: 2.5em;
+  }
+}
+.slider-label{
+  text-align: center;
+}
+input[type="range"] {
   height: 2px;
   background: lightcoral;
   border: none;

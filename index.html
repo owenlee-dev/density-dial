@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,11 +8,10 @@
     <title>Density Dial</title>
   </head>
   <body>
+
     <div class="grid-frame">
-        <div class="plot-chord">
-          <div class="grid-container">
-          <div class="radius"></div>
-          <p class="radius-txt">3.99 meters</p>
+      <div class="plot-chord">
+        <div class="grid-container">
           <div class="grid-item"></div>
           <div class="grid-item"></div>
           <div class="grid-item"></div>
@@ -162,22 +161,109 @@
           <div class="grid-item"></div>
           <div class="grid-item"></div>
           <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+          <div class="grid-item"></div>
+        </div>
       </div>
+
     </div>
+    <div class="slider-container">
 
-      </div>
-        <div class="slider-container">
-          <h2>Density Dial</h2>
-          <p>Spacing between trees: <span class="tree-spacing">2.7</span>m</p>
-          <input type="range" min="1.5" max="4" value="2.7" step="0.1" class="tree-range-slider"/>
+      <div class="slider-header">
+        <h2 class="dd-title">Density Dial</h2>
 
-          <p>Spacing between lines: <span class="line-spacing">2.7</span>m</p>
-          <input type="range" min="1.5" max="4" value="2.7" step="0.1" class="line-range-slider" />
-
+        <div class="step-container">
+          <p>Step length: <span class="step-length">1.2</span>m</p>
+          <input class="step-slider" type="range" min="0.5" max="2" value="1.2" step="0.1">
         </div>
 
+        <div class="data">
+          <p class="data-out">Stems Per Hectare (SPH): <span class="data-value sph">1400</span></p>
+          <p class="data-out">Number of trees in plot: <span class="data-value plot-value">7</span></p>
+          <p class="data-out">Number of steps between trees: <span class="data-value step-value">2.3</span></p>
+        </div>
+      </div>
 
-        <script src="DensityDial.js"></script>
-</div>
-</body>
+      <p class="slider-label">Spacing between trees: <span class="tree-spacing">2.7</span>m</p>
+      <input type="range" min="1.5" max="4" value="2.7" step="0.1"
+        class="tree-range-slider"/>
+
+      <p class="slider-label">Spacing between lines: <span class="line-spacing">2.7</span>m</p>
+      <input type="range" min="1.5" max="4" value="2.7" step="0.1"
+        class="line-range-slider" />
+    </div>
+
+
+
+    <script src="DensityDial.js"></script>
+  </body>
 </html>

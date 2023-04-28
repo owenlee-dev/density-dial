@@ -1,23 +1,23 @@
-// build sliders
-// Figure out conversion
-// grid lines
-
 // Density 2000= 10 trees/plot = 2.23m spacing
 // Density 1800= 9 trees/plot = 2.36m spacing
 // Density 1600= 8 trees/plot = 2.5m spacing
-// Density 1400= 7 trees/plot = 2.7m spacing  
+// Density 1400= 7 trees/plot = 2.7m spacing
 // Density 1200= 6 trees/plot = 2.9m spacing
 // Density 1000= 5 trees/plot = 3.16m spacing
 // Density 800= 4 trees/plot = 3.8m spacing
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SELECT HTML ELEMENTS
 const meter = 21;
 
 const plotValue = document.querySelector(".plot-value");
 const sph = document.querySelector(".sph");
+const switchBox = document.querySelector(".switch-box");
+const plotChord = document.querySelector(".plot-chord");
 
-const stepSlider=document.querySelector(".step-slider");
-const stepLength=document.querySelector(".step-length");
-const numSteps=document.querySelector(".step-value");
+const stepSlider = document.querySelector(".step-slider");
+const stepLength = document.querySelector(".step-length");
+const numSteps = document.querySelector(".step-value");
 
 const treeSpacing = document.querySelector(".tree-spacing");
 const treeSlider = document.querySelector(".tree-range-slider");
@@ -29,33 +29,170 @@ const gridSlider = document.querySelector(".grid-range-slider");
 const gridSpacing = document.querySelector(".grid-spacing");
 
 const treeGrid = document.querySelector(".grid-container");
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //initialize spcaing
 treeGrid.style.columnGap = 2.7 * meter + "px";
 treeGrid.style.rowGap = 2.7 * meter + "px";
 
-// stsep spacing
+// step spacing
 stepSlider.addEventListener("input", (event) => {
-  stepLength.innerHTML = (event.target.value*1).toFixed(1);
-  numSteps.innerHTML=(treeSpacing.innerHTML/stepLength.innerHTML).toFixed(1);
+  stepLength.innerHTML = (event.target.value * 1).toFixed(1);
+  numSteps.innerHTML = (treeSpacing.innerHTML / stepLength.innerHTML).toFixed(
+    1
+  );
 });
 
-// tree spacing
+// show trees switch
+switchBox.addEventListener("input", (event) => {
+  if(plotChord.style.overflow=="visible"){
+    plotChord.style.overflow = "hidden";
+  }
+  else{
+    plotChord.style.overflow="visible";
+  }
+});
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Helper function to loop through all the coordinates
+// TODO make more efficient
+const throwPlot = (grid, POx, POy) => {
+  let numTrees = 0;
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      let Tx = grid[i][j][0] * lineSpacing.innerHTML;
+      let Ty = grid[i][j][1] * treeSpacing.innerHTML;
+      if ((POy - Ty) ** 2 + (POx - Tx) ** 2 <= 3.99 ** 2) {
+        numTrees++;
+      }
+    }
+  }
+  return numTrees;
+};
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const doTheThing = () => {
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // DENSITY DISTRIBUTION CALCULATION
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // grid 20x20 grid of coordinates
+  let grid = new Array(20);
+  for (let i = 0; i < grid.length; i++) {
+    grid[i] = new Array(20);
+  }
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      grid[i][j] = [i, j];
+    }
+  }
+
+  let plotList = {};
+
+  let PO = grid[9][9];
+  let POx = PO[0] * lineSpacing.innerHTML;
+  let POy = PO[1] * treeSpacing.innerHTML;
+  // loop through every square cm of the chosen area and throw a plot
+  for (let i = POx; i < POx + Number(lineSpacing.innerHTML); i += 0.1) {
+    for (let j = POy; j < POy + Number(treeSpacing.innerHTML); j += 0.1) {
+      let plot = throwPlot(grid, i, j);
+      // if plot already exists in plot list -> increment
+      // if not, add to plot list and increment
+      if (plot in plotList) {
+        plotList[plot] += 1;
+      } else {
+        plotList[plot] = 1;
+      }
+    }
+  }
+
+  // results
+  const values = Object.values(plotList);
+  const totalNumPlots = values.reduce(function (a, b) {
+    return +a + +b;
+  });
+  let plotPercents = {};
+  for (plot in plotList) {
+    plotPercents[plot] = (plotList[plot] / totalNumPlots) * 100;
+  }
+  return plotPercents;
+};
+let plotPercents = doTheThing();
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// PLOT RESULTS
+let chartElement = document.getElementById("plot-chart");
+let config = {
+  type: "bar",
+  data: {
+    labels: Object.keys(plotPercents),
+    datasets: [
+      {
+        label: "Frequency of plot (%)",
+        data: Object.values(plotPercents),
+      },
+    ],
+  },
+  options: {
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "% Frequency of plot",
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: "Number of trees in plot",
+        },
+      },
+    },
+  },
+};
+let plotChart = new Chart(chartElement, config);
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//EVENT LISTENERS
+// When changing the tree spacing
 treeSlider.addEventListener("input", (event) => {
   treeGrid.style.rowGap = event.target.value * meter + "px";
   treeSpacing.innerHTML = event.target.value;
-  sph.innerHTML=Math.round((100/treeSpacing.innerHTML)*(100/lineSpacing.innerHTML));
-  plotValue.innerHTML=Math.round((sph.innerHTML/200)*100)/100;
-  numSteps.innerHTML=Math.round((treeSpacing.innerHTML/stepLength.innerHTML)*10)/10;
-
+  sph.innerHTML = Math.round(
+    (100 / treeSpacing.innerHTML) * (100 / lineSpacing.innerHTML)
+  );
+  plotValue.innerHTML = Math.round((sph.innerHTML / 200) * 100) / 100;
+  numSteps.innerHTML =
+    Math.round((treeSpacing.innerHTML / stepLength.innerHTML) * 10) / 10;
+  let plotPercents = doTheThing();
+  plotChart.config.data = {
+    labels: Object.keys(plotPercents),
+    datasets: [
+      {
+        label: "Frequency of plot (%)",
+        data: Object.values(plotPercents),
+      },
+    ],
+  };
+  plotChart.update();
 });
 
-// line spacing
+// When changing the line spacing
 lineSlider.addEventListener("input", (event) => {
   treeGrid.style.columnGap = event.target.value * meter + "px";
   lineSpacing.innerHTML = event.target.value;
-  sph.innerHTML=Math.round((100/treeSpacing.innerHTML)*(100/lineSpacing.innerHTML));
-  plotValue.innerHTML=Math.round((sph.innerHTML/200)*100)/100;
-  numSteps.innerHTML=Math.round((treeSpacing.innerHTML/stepLength.innerHTML)*10)/10;
-
+  sph.innerHTML = Math.round(
+    (100 / treeSpacing.innerHTML) * (100 / lineSpacing.innerHTML)
+  );
+  plotValue.innerHTML = Math.round((sph.innerHTML / 200) * 100) / 100;
+  numSteps.innerHTML =
+    Math.round((treeSpacing.innerHTML / stepLength.innerHTML) * 10) / 10;
+  let plotPercents = doTheThing();
+  plotChart.config.data = {
+    labels: Object.keys(plotPercents),
+    datasets: [
+      {
+        label: "Frequency of plot (%)",
+        data: Object.values(plotPercents),
+      },
+    ],
+  };
+  plotChart.update();
 });

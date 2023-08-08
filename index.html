@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" href="/assets/tree_icon.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" href="/assets/tree_icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <meta name="description" content="Planting tool to dial your density">
+    <meta name="description" content="Planting tool to dial your density" />
     <title>Density Dial</title>
   </head>
   <body>
@@ -15,13 +15,20 @@
     <div class="top-container">
       <div>
         <label>Zoom</label>
-        <input class="zoom" min="10" max="20" value='10' step="1"
-          onchange="showVal(this.value)" type="range"/>
+        <input
+          class="zoom"
+          min="10"
+          max="20"
+          value="10"
+          step="1"
+          onchange="showVal(this.value)"
+          type="range"
+        />
       </div>
       <div>
         <label>Show Trees</label>
         <label class="switch">
-          <input class="switch-box" name="showTrees" type="checkbox">
+          <input class="switch-box" name="showTrees" type="checkbox" />
           <span class="slider round"></span>
         </label>
       </div>
@@ -599,11 +606,8 @@
           <div class="empty"></div>
           <div class="grid-item"></div>
           <div class="empty"></div>
-
-
         </div>
       </div>
-
     </div>
     <div class="slider-container">
       <!-- <p class="slider-label">Spacing between trees: <span class="tree-spacing">2.9</span>m</p>
@@ -614,26 +618,45 @@
       <input type="range" min="1" max="4" value="2.9" step="0.1"
         class="line-range-slider" /> -->
 
-      <p class="slider-label">Spacing between trees (triangular): <span class="triangle-spacing">2.9</span>m</p>
-      <input type="range" min="1" max="4" value="2.9" step="0.1"
-        class="triangle-range-slider" />
-
+      <p class="slider-label">
+        Spacing between trees (triangular):
+        <span class="triangle-spacing">2.9</span>m
+      </p>
+      <input
+        type="range"
+        min="1"
+        max="4"
+        value="2.9"
+        step="0.1"
+        class="triangle-range-slider"
+      />
 
       <div class="slider-header">
         <div class="step-container">
-          <p>Step length: </p>
-          <input class="step-slider" type="range" min="0.5" max="2" value="1.2"
-            step="0.1">
+          <p>Step length:</p>
+          <input
+            class="step-slider"
+            type="range"
+            min="0.5"
+            max="2"
+            value="1.2"
+            step="0.1"
+          />
           <p><span class="step-length">1.2</span>m</p>
         </div>
 
         <div class="data">
-          <p class="data-out">Stems Per Hectare (SPH): <span class="data-value
-              sph">1372</span></p>
-          <p class="data-out">Average Number of trees in plot: <span
-              class="data-value plot-value">6.86</span></p>
-          <p class="data-out">Number of steps between trees: <span
-              class="data-value step-value">2.3</span></p>
+          <p class="data-out">
+            Stems Per Hectare (SPH): <span class="data-value sph">1372</span>
+          </p>
+          <p class="data-out">
+            Average Number of trees in plot:
+            <span class="data-value plot-value">6.86</span>
+          </p>
+          <p class="data-out">
+            Number of steps between trees:
+            <span class="data-value step-value">2.3</span>
+          </p>
         </div>
       </div>
     </div>
@@ -645,6 +668,5 @@
     <script src="DensityDial.js"></script>
     <script src="ZoomFunction.js"></script>
     <script src="DraggableElement.js"></script>
-
   </body>
 </html>

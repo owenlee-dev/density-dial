@@ -8,7 +8,7 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SELECT HTML ELEMENTS
-const meter = 16;
+const meter = 26;
 
 const plotValue = document.querySelector(".plot-value");
 const sph = document.querySelector(".sph");
@@ -18,6 +18,9 @@ const plotChord = document.querySelector(".plot-chord");
 const stepSlider = document.querySelector(".step-slider");
 const stepLength = document.querySelector(".step-length");
 const numSteps = document.querySelector(".step-value");
+
+const triangularSpacing = document.querySelector(".triangle-spacing");
+const triangularSlider = document.querySelector(".triangle-range-slider");
 
 const treeSpacing = document.querySelector(".tree-spacing");
 const treeSlider = document.querySelector(".tree-range-slider");
@@ -30,17 +33,16 @@ const gridSpacing = document.querySelector(".grid-spacing");
 
 const treeGrid = document.querySelector(".grid-container");
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 //initialize spcaing
-treeGrid.style.columnGap = 2.9 * meter/2 + "px";
-treeGrid.style.rowGap = 2.9 * meter + "px";
+treeGrid.style.columnGap = (2.9 * meter) / 2 + "px";
+treeGrid.style.rowGap = (2.9 * meter) / 2 + "px";
 
 // step spacing
 stepSlider.addEventListener("input", (event) => {
   stepLength.innerHTML = (event.target.value * 1).toFixed(1);
-  numSteps.innerHTML = (treeSpacing.innerHTML / stepLength.innerHTML).toFixed(
-    1
-  );
+  numSteps.innerHTML = (
+    triangularSpacing.innerHTML / stepLength.innerHTML
+  ).toFixed(1);
 });
 
 // show trees switch
@@ -54,24 +56,25 @@ switchBox.addEventListener("input", (event) => {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Helper function to loop through all the coordinates
-// TODO make more efficient
 const throwPlot = (grid, POx, POy) => {
   let numTrees = 0;
   let Ty, Tx;
   let k = true;
+  let spacing = triangularSpacing.innerHTML;
+  // loop vertical
   for (let i = 0; i < grid.length; i++) {
     if (k) {
       k = false;
     } else {
       k = true;
     }
-
+    // loop horizontal
     for (let j = 0; j < grid[0].length; j++) {
-      Tx = grid[i][j][0] * lineSpacing.innerHTML;
+      Tx = grid[i][j][0] * spacing;
       if (k) {
-        Ty = grid[i][j][1] * treeSpacing.innerHTML + treeSpacing.innerHTML / 2;
+        Ty = grid[i][j][1] * spacing + spacing / 2;
       } else {
-        Ty = grid[i][j][1] * treeSpacing.innerHTML;
+        Ty = grid[i][j][1] * spacing;
       }
       if ((POy - Ty) ** 2 + (POx - Tx) ** 2 <= 3.99 ** 2) {
         numTrees++;
@@ -87,6 +90,8 @@ const doTheThing = () => {
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // grid 20x20 grid of coordinates
   let grid = new Array(20);
+  let spacing = triangularSpacing.innerHTML;
+
   for (let i = 0; i < grid.length; i++) {
     grid[i] = new Array(20);
   }
@@ -99,12 +104,13 @@ const doTheThing = () => {
   let plotList = {};
 
   let PO = grid[9][9];
-  let POx = PO[0] * lineSpacing.innerHTML;
-  let POy = PO[1] * treeSpacing.innerHTML;
+  let POx = Math.round(PO[0] * spacing * 10) / 10;
+  let POy = Math.round(PO[1] * spacing * 10) / 10;
   // loop through every square cm of the chosen area and throw a plot
-  for (let i = POx; i < POx + Number(lineSpacing.innerHTML); i += 0.1) {
-    for (let j = POy; j < POy + Number(treeSpacing.innerHTML); j += 0.1) {
+  for (let i = POx; i < POx + Number(spacing); i += 0.1) {
+    for (let j = POy; j < POy + Number(spacing); j += 0.1) {
       let plot = throwPlot(grid, i, j);
+
       // if plot already exists in plot list -> increment
       // if not, add to plot list and increment
       if (plot in plotList) {
@@ -160,41 +166,48 @@ let config = {
 };
 let plotChart = new Chart(chartElement, config);
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//EVENT LISTENERS
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// EVENT LISTENERS
 // When changing the tree spacing
-treeSlider.addEventListener("input", (event) => {
-  treeGrid.style.rowGap = event.target.value * meter + "px";
-  treeSpacing.innerHTML = event.target.value;
-  sph.innerHTML = Math.round(
-    (100 / treeSpacing.innerHTML) * (100 / lineSpacing.innerHTML)
-  );
-  plotValue.innerHTML = Math.round((sph.innerHTML / 200) * 100) / 100;
-  numSteps.innerHTML =
-    Math.round((treeSpacing.innerHTML / stepLength.innerHTML) * 10) / 10;
-  let plotPercents = doTheThing();
-  plotChart.config.data = {
-    labels: Object.keys(plotPercents),
-    datasets: [
-      {
-        label: "Frequency of plot (%)",
-        data: Object.values(plotPercents),
-      },
-    ],
-  };
-  plotChart.update();
-});
+// treeSlider.addEventListener("input", (event) => {
+//   treeGrid.style.rowGap = event.target.value * meter + "px";
+//   triangularSpacing.innerHTML = event.target.value;
+//   sph.innerHTML = Math.round(
+//     (100 / triangularSpacing.innerHTML) * (100 / triangularSpacing.innerHTML)
+//   );
+//   plotValue.innerHTML = Math.round((sph.innerHTML / 200) * 100) / 100;
+//   numSteps.innerHTML =
+//     Math.round((triangularSpacing.innerHTML / stepLength.innerHTML) * 10) / 10;
+//   let plotPercents = doTheThing();
+//   plotChart.config.data = {
+//     labels: Object.keys(plotPercents),
+//     datasets: [
+//       {
+//         label: "Frequency of plot (%)",
+//         data: Object.values(plotPercents),
+//       },
+//     ],
+//   };
+//   plotChart.update();
+// });
 
 // When changing the line spacing
-lineSlider.addEventListener("input", (event) => {
-  treeGrid.style.columnGap = event.target.value/2 * meter + "px";
-  lineSpacing.innerHTML = event.target.value;
+triangularSlider.addEventListener("input", (event) => {
+  // expand grid of trees
+  treeGrid.style.columnGap = (event.target.value / 2) * meter + "px";
+  treeGrid.style.rowGap = (event.target.value / 2) * meter + "px";
+
+  // update the slider label
+  triangularSpacing.innerHTML = event.target.value;
+
+  //update the slider container
   sph.innerHTML = Math.round(
-    (100 / treeSpacing.innerHTML) * (100 / lineSpacing.innerHTML)
+    2 / triangularSpacing.innerHTML ** 2 / Math.sqrt(3) / 0.0001
   );
   plotValue.innerHTML = Math.round((sph.innerHTML / 200) * 100) / 100;
   numSteps.innerHTML =
-    Math.round((treeSpacing.innerHTML / stepLength.innerHTML) * 10) / 10;
+    Math.round((triangularSpacing.innerHTML / stepLength.innerHTML) * 10) / 10;
+
   let plotPercents = doTheThing();
   plotChart.config.data = {
     labels: Object.keys(plotPercents),

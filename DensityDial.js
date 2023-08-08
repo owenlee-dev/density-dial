@@ -1,14 +1,14 @@
-// Density 2000= 10 trees/plot = 2.23m spacing
-// Density 1800= 9 trees/plot = 2.36m spacing
-// Density 1600= 8 trees/plot = 2.5m spacing
-// Density 1400= 7 trees/plot = 2.7m spacing
-// Density 1200= 6 trees/plot = 2.9m spacing
-// Density 1000= 5 trees/plot = 3.16m spacing
+// Density 2000= 10 trees/plot = 2.4m spacing
+// Density 1800= 9 trees/plot = 2.5m spacing
+// Density 1600= 8 trees/plot = 2.7m spacing
+// Density 1400= 7 trees/plot = 2.9m spacing
+// Density 1200= 6 trees/plot = 3.1m spacing
+// Density 1000= 5 trees/plot = 3.4m spacing
 // Density 800= 4 trees/plot = 3.8m spacing
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SELECT HTML ELEMENTS
-const meter = 21;
+const meter = 16;
 
 const plotValue = document.querySelector(".plot-value");
 const sph = document.querySelector(".sph");
@@ -32,8 +32,8 @@ const treeGrid = document.querySelector(".grid-container");
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //initialize spcaing
-treeGrid.style.columnGap = 2.7 * meter + "px";
-treeGrid.style.rowGap = 2.7 * meter + "px";
+treeGrid.style.columnGap = 2.9 * meter/2 + "px";
+treeGrid.style.rowGap = 2.9 * meter + "px";
 
 // step spacing
 stepSlider.addEventListener("input", (event) => {
@@ -45,11 +45,10 @@ stepSlider.addEventListener("input", (event) => {
 
 // show trees switch
 switchBox.addEventListener("input", (event) => {
-  if(plotChord.style.overflow=="visible"){
+  if (plotChord.style.overflow == "visible") {
     plotChord.style.overflow = "hidden";
-  }
-  else{
-    plotChord.style.overflow="visible";
+  } else {
+    plotChord.style.overflow = "visible";
   }
 });
 
@@ -58,10 +57,22 @@ switchBox.addEventListener("input", (event) => {
 // TODO make more efficient
 const throwPlot = (grid, POx, POy) => {
   let numTrees = 0;
+  let Ty, Tx;
+  let k = true;
   for (let i = 0; i < grid.length; i++) {
+    if (k) {
+      k = false;
+    } else {
+      k = true;
+    }
+
     for (let j = 0; j < grid[0].length; j++) {
-      let Tx = grid[i][j][0] * lineSpacing.innerHTML;
-      let Ty = grid[i][j][1] * treeSpacing.innerHTML;
+      Tx = grid[i][j][0] * lineSpacing.innerHTML;
+      if (k) {
+        Ty = grid[i][j][1] * treeSpacing.innerHTML + treeSpacing.innerHTML / 2;
+      } else {
+        Ty = grid[i][j][1] * treeSpacing.innerHTML;
+      }
       if ((POy - Ty) ** 2 + (POx - Tx) ** 2 <= 3.99 ** 2) {
         numTrees++;
       }
@@ -176,7 +187,7 @@ treeSlider.addEventListener("input", (event) => {
 
 // When changing the line spacing
 lineSlider.addEventListener("input", (event) => {
-  treeGrid.style.columnGap = event.target.value * meter + "px";
+  treeGrid.style.columnGap = event.target.value/2 * meter + "px";
   lineSpacing.innerHTML = event.target.value;
   sph.innerHTML = Math.round(
     (100 / treeSpacing.innerHTML) * (100 / lineSpacing.innerHTML)

@@ -11,7 +11,6 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SELECT HTML ELEMENTS
-const meter = 30;
 
 const plotValue = document.querySelector(".plot-value");
 const sph = document.querySelector(".sph");
@@ -35,6 +34,9 @@ const gridSlider = document.querySelector(".grid-range-slider");
 const gridSpacing = document.querySelector(".grid-spacing");
 
 const treeGrid = document.querySelector(".grid-container");
+let meter = 30;
+console.log(triangularSlider);
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //initialize spcaing
 treeGrid.style.columnGap = (2.9 * meter) / Math.sqrt(3) / 2 + "px";
@@ -129,7 +131,7 @@ const doTheThing = () => {
     }
   }
 
-  console.log(plotList);
+  // console.log(plotList);
   // results
   const values = Object.values(plotList);
   const totalNumPlots = values.reduce(function (a, b) {
@@ -143,7 +145,6 @@ const doTheThing = () => {
 };
 
 let plotPercents = doTheThing();
-console.log(plotPercents);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PLOT RESULTS
 let chartElement = document.getElementById("plot-chart");
@@ -204,6 +205,11 @@ let plotChart = new Chart(chartElement, config);
 
 // When changing the line spacing
 triangularSlider.addEventListener("input", (event) => {
+  if (triangularSpacing.innerHTML >= 3.0) {
+    meter = 33;
+  } else {
+    meter = 30;
+  }
   // expand grid of trees
   treeGrid.style.columnGap =
     (event.target.value / Math.sqrt(3) / 2) * meter + "px";

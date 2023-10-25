@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Carter+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Itim&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alice&display=swap");
 
 body {
   background-color: #98b6b1;
@@ -16,9 +17,10 @@ body {
 .dd-title {
   text-align: center;
   font-size: 3vw;
-  padding: 0px 3em;
+  padding: 0em 3em;
   margin: 0;
   background-color: bisque;
+  border-radius:20px;
   font-family: "Carter One", cursive;
   border: 2px solid black;
   box-shadow: 10px 10px 20px black;
@@ -94,7 +96,7 @@ body {
 }
 .grid-container {
   position: absolute;
-  transform: translate(-50%, -65%);
+  /* transform: translate(-50%, -65%); */
   display: grid;
   cursor: move;
   grid-template-rows:  1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;

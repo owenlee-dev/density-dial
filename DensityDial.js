@@ -1,14 +1,17 @@
-// Density 2000= 10 trees/plot = 2.4m spacing
-// Density 1800= 9 trees/plot = 2.5m spacing
-// Density 1600= 8 trees/plot = 2.7m spacing
-// Density 1400= 7 trees/plot = 2.9m spacing
-// Density 1200= 6 trees/plot = 3.1m spacing
-// Density 1000= 5 trees/plot = 3.4m spacing
-// Density 800= 4 trees/plot = 3.8m spacing
+// Density 2000 = 10 trees/plot = 2.4m spacing
+// Density 1800 = 9 trees/plot = 2.5m spacing
+// Density 1600 = 8 trees/plot = 2.7m spacing
+// Density 1400 = 7 trees/plot = 2.9m spacing
+// Density 1200 = 6 trees/plot = 3.1m spacing
+// Density 1000 = 5 trees/plot = 3.4m spacing
+// Density 800 = 4 trees/plot = 3.8m spacing
+
+// Distribution problem statement
+// You want the distribution of the number of points (or trees) inside a circle of radius 3.99 given a spacing (distance between adjacent points). The problem then becomes scanning through all possible center points of the circle (with a granularity of 0.1) within the grid and calculating the number of grid points (or trees) that fall inside the circle for each center point.
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SELECT HTML ELEMENTS
-const meter = 26;
+const meter = 30;
 
 const plotValue = document.querySelector(".plot-value");
 const sph = document.querySelector(".sph");
@@ -34,7 +37,7 @@ const gridSpacing = document.querySelector(".grid-spacing");
 const treeGrid = document.querySelector(".grid-container");
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //initialize spcaing
-treeGrid.style.columnGap = (2.9 * meter) / 2 + "px";
+treeGrid.style.columnGap = (2.9 * meter) / Math.sqrt(3) / 2 + "px";
 treeGrid.style.rowGap = (2.9 * meter) / 2 + "px";
 
 // step spacing
@@ -60,7 +63,9 @@ const throwPlot = (grid, POx, POy) => {
   let numTrees = 0;
   let Ty, Tx;
   let k = true;
-  let spacing = triangularSpacing.innerHTML;
+  let spacingX = parseFloat(triangularSpacing.innerHTML);
+  let spacingY = (Math.sqrt(3) / 2) * spacingX;
+
   // loop vertical
   for (let i = 0; i < grid.length; i++) {
     if (k) {
@@ -70,11 +75,11 @@ const throwPlot = (grid, POx, POy) => {
     }
     // loop horizontal
     for (let j = 0; j < grid[0].length; j++) {
-      Tx = grid[i][j][0] * spacing;
+      Tx = grid[i][j][0] * spacingY;
       if (k) {
-        Ty = grid[i][j][1] * spacing + spacing / 2;
+        Ty = grid[i][j][1] * spacingX + 0.5 * spacingX;
       } else {
-        Ty = grid[i][j][1] * spacing;
+        Ty = grid[i][j][1] * spacingX;
       }
       if ((POy - Ty) ** 2 + (POx - Tx) ** 2 <= 3.99 ** 2) {
         numTrees++;
@@ -90,8 +95,9 @@ const doTheThing = () => {
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // grid 20x20 grid of coordinates
   let grid = new Array(20);
-  let spacing = triangularSpacing.innerHTML;
+  let spacing = parseFloat(triangularSpacing.innerHTML);
 
+  // initialize grid with each point having a coordinate (x,y)
   for (let i = 0; i < grid.length; i++) {
     grid[i] = new Array(20);
   }
@@ -103,12 +109,14 @@ const doTheThing = () => {
 
   let plotList = {};
 
+  // arbitrarily chose a point a "starting center point"
   let PO = grid[9][9];
   let POx = Math.round(PO[0] * spacing * 10) / 10;
   let POy = Math.round(PO[1] * spacing * 10) / 10;
-  // loop through every square cm of the chosen area and throw a plot
-  for (let i = POx; i < POx + Number(spacing); i += 0.1) {
-    for (let j = POy; j < POy + Number(spacing); j += 0.1) {
+
+  // move the center of the plot 0.1 along a rectangle that is spacing x [root(3)/2*spacing]
+  for (let i = POx; i < POx + spacing; i += 0.1) {
+    for (let j = POy; j < POy + 2 * spacing; j += 0.1) {
       let plot = throwPlot(grid, i, j);
 
       // if plot already exists in plot list -> increment
@@ -121,6 +129,7 @@ const doTheThing = () => {
     }
   }
 
+  console.log(plotList);
   // results
   const values = Object.values(plotList);
   const totalNumPlots = values.reduce(function (a, b) {
@@ -132,7 +141,9 @@ const doTheThing = () => {
   }
   return plotPercents;
 };
+
 let plotPercents = doTheThing();
+console.log(plotPercents);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PLOT RESULTS
 let chartElement = document.getElementById("plot-chart");
@@ -194,7 +205,8 @@ let plotChart = new Chart(chartElement, config);
 // When changing the line spacing
 triangularSlider.addEventListener("input", (event) => {
   // expand grid of trees
-  treeGrid.style.columnGap = (event.target.value / 2) * meter + "px";
+  treeGrid.style.columnGap =
+    (event.target.value / Math.sqrt(3) / 2) * meter + "px";
   treeGrid.style.rowGap = (event.target.value / 2) * meter + "px";
 
   // update the slider label
